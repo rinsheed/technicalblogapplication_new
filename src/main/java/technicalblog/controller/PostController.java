@@ -12,7 +12,6 @@ import technicalblog.service.PostService;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @Controller
 public class PostController {
     @Autowired
