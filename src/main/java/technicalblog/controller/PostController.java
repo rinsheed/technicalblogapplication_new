@@ -1,6 +1,5 @@
 package technicalblog.controller;
 
-import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,42 +11,49 @@ import technicalblog.service.PostService;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Controller
 public class PostController {
+
     @Autowired
     private PostService postService;
 
     @RequestMapping("posts")
     public String getUserPosts(Model model) {
-        //ArrayList<Post> posts = postService.getOnePost();
         List<Post> posts = postService.getAllPosts();
         model.addAttribute("posts", posts);
         return "posts";
     }
 
     @RequestMapping("/posts/newpost")
-    public String createPost(){
+    public String newPost() {
         return "posts/create";
     }
 
-    @RequestMapping(name = "posts/create", method = RequestMethod.POST)
-    public String createPost(Post post){
-        postService.createPost(post);
+    @RequestMapping(value = "/posts/create", method = RequestMethod.POST)
+    public String createPost(Post newPost) {
+        postService.createPost(newPost);
         return "redirect:/posts";
     }
 
-    @RequestMapping(name = "/editPost", method = RequestMethod.GET)
-    public String editPost(@RequestParam(name = "postId", required = false) Integer postId, Model model){
+    @RequestMapping(value = "/editPost", method = RequestMethod.GET)
+    public String editPost(@RequestParam(name="postId") Integer postId, Model model) {
         Post post = postService.getPost(postId);
-        model.addAttribute("post", post);
+        model.addAttribute("post",post);
         return "posts/edit";
     }
 
-//    @RequestMapping(value = "/editPost", method = RequestMethod.PUT)
-//    public String editPostSubmit(@RequestParam(name="postId") Integer postId, Post updatedPost) {
-//        updatedPost.setId(postId);
-//        postService.updatePost(updatedPost);
-//        return "redirect:/posts";
-//    }
+    @RequestMapping(value = "/editPost", method = RequestMethod.PUT)
+    public String editPostSubmit(@RequestParam(name="postId") Integer postId, Post updatedPost) {
+        updatedPost.setId(postId);
+        postService.updatePost(updatedPost);
+        return "redirect:/posts";
+    }
+
+    @RequestMapping(value = "/deletePost", method = RequestMethod.DELETE)
+    public String deletePostSubmit(@RequestParam(name="postId") Integer postId) {
+        postService.deletePost(postId);
+        return "redirect:/posts";
+    }
 
 }

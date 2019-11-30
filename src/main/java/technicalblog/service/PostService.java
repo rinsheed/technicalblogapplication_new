@@ -2,6 +2,8 @@ package technicalblog.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import technicalblog.model.Post;
 import technicalblog.repository.PostRepository;
 
@@ -15,31 +17,37 @@ import java.util.List;
 public class PostService {
 
     @Autowired
-    private PostRepository postRepository;
+    private PostRepository repository;
+
+    public PostService() {
+        System.out.println("*** PostService ***");
+    }
 
     public List<Post> getAllPosts() {
-        return postRepository.getAllPost();
+        return repository.getAllPosts();
     }
 
-    public ArrayList<Post> getOnePost() {
-        ArrayList<Post> posts = new ArrayList<>();
-        posts.add(postRepository.getLatestPost());
-        return posts;
+    public Post getOnePost() {
+        return repository.getLatestPost();
     }
 
-    public void createPost(Post newPost){
+    public void createPost(Post newPost) {
         newPost.setDate(new Date());
-        postRepository.createPost(newPost);
+        repository.createPost(newPost);
         System.out.println("New Post: "+newPost);
     }
 
-    public Post getPost(Integer postId){
-        return postRepository.getPost(postId);
+    public Post getPost(Integer postId) {
+        return repository.getPost(postId);
     }
 
-    public void updatePost(Post updatedPost){
+    public void updatePost(Post updatedPost) {
         updatedPost.setDate(new Date());
-        postRepository.updatePost(updatedPost);
+        repository.updatePost(updatedPost);
+    }
+
+    public void deletePost(Integer postId) {
+        repository.deletePost(postId);
     }
 
 }
