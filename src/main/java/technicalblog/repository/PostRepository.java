@@ -24,4 +24,41 @@ public class PostRepository {
         return em.find(Post.class, 3);
     }
 
+    public Post createPost(Post newPost) {
+
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+
+        try {
+            transaction.begin();
+            em.persist(newPost);
+            transaction.commit();
+        }
+        catch(Exception e) {
+            transaction.rollback();
+        }
+
+        return newPost;
+    }
+
+    public Post getPost(Integer postId){
+        EntityManager em = emf.createEntityManager();
+        return em.find(Post.class, postId);
+    }
+
+    public void updatePost(Post updatedPost){
+
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+
+        try {
+            transaction.begin();
+            em.merge(updatedPost);
+            transaction.commit();
+        }
+        catch(Exception e) {
+            transaction.rollback();
+        }
+
+    }
 }

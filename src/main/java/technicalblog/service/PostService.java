@@ -27,7 +27,19 @@ public class PostService {
         return posts;
     }
 
-    public void createPost(Post post){
-
+    public void createPost(Post newPost){
+        newPost.setDate(new Date());
+        postRepository.createPost(newPost);
+        System.out.println("New Post: "+newPost);
     }
+
+    public Post getPost(Integer postId){
+        return postRepository.getPost(postId);
+    }
+
+    public void updatePost(Post updatedPost){
+        updatedPost.setDate(new Date());
+        postRepository.updatePost(updatedPost);
+    }
+
 }
