@@ -50,4 +50,8 @@ public class PostService {
         repository.deletePost(postId);
     }
 
+    public void deletePost(String title){
+        repository.deletePost(title);
+    }
+
 }

@@ -23,6 +23,14 @@ public class PostRepository {
         return resultList;
     }
 
+    public List<Post> getUserPosts(Integer user_id) {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Post> query = em.createQuery("SELECT p from Post p WHERE p.user.id = :user_id", Post.class);
+        List<Post> resultList = query.getResultList();
+
+        return resultList;
+    }
+
     public Post getLatestPost() {
         EntityManager em = emf.createEntityManager();
         return em.find(Post.class, 3);
@@ -70,6 +78,21 @@ public class PostRepository {
             transaction.begin();
             Post post = em.find(Post.class, postId);
             em.remove(post);
+            transaction.commit();
+        }catch(Exception e) {
+            transaction.rollback();
+        }
+    }
+
+    public void deletePost(String title) {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Post> query = em.createQuery("SELECT p from Post p where title = '" + title + "'", Post.class);
+        List<Post> post = query.getResultList();
+
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+            em.remove(post.get(0));
             transaction.commit();
         }catch(Exception e) {
             transaction.rollback();
